@@ -11,7 +11,7 @@ const AccessBuyer = () => {
         }
     };
 
-    const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract("Zkexchange");
+    const { writeContractAsync } = useScaffoldWriteContract("Zkexchange");
 
 
     const { data: buyer_role } = useReadContract({
@@ -39,9 +39,9 @@ const handleClear = () => {
         e.preventDefault();
         // setLoading(true)
         try {
-            await writeYourContractAsync({
+            await writeContractAsync({
                 functionName: "grantRole",
-                args: [buyer_role as `0x${string}`, accountM]
+                args: ["0x241ecf16d79d0f8dbfb92cbc07fe17840425976cf0667f022fe9877caa831b08", accountM as `0x${string}`]
               });
               handleClear()
             // setLoading(false)

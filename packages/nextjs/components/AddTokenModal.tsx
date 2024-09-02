@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import CustomInput from './CustomInput';
-import { zkexchange } from '~~/contracts/zkexchange';
-import { getGeneralPaymasterInput } from "viem/zksync";
-import { toast } from "react-toastify";
-import { walletClient } from "~~/utils/wagmi"
+import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth';
+
 
 const AddTokenModal = () => {
     const openModal = () => {
@@ -20,54 +18,27 @@ const AddTokenModal = () => {
     const [min, setMin] = useState<any>("")
     const [max, setMax] = useState<any>("")
     const [loading, setLoading] = useState(false)
-    const isFormFilled = tokenAddress && fee && min && max
 
-    const paymasterAddress = "0xBAb868Bfd8BB3e1B3Adaec62c69CE5DA6FEb3879"
-    const handleToken = async () => {
-        // setLoading(true)
-        if (!isFormFilled) throw new Error("fill the form")
-            
-            const [account] =
-            typeof window !== "undefined" && window.ethereum
-            ? await window.ethereum.request({ method: "eth_requestAccounts" }) // Request accounts if in a browser with Ethereum provider
-            : [];
-
-        if (!account) {
-            throw new Error("No account found. Please connect your wallet."); // Throw an error if no account is found
-        }
-
-        try {
-            await walletClient?.writeContract({
-                address: zkexchange.address,
-                abi: zkexchange.abi,
-                functionName: "addToken",
-                args: [tokenAddress, fee, min, max],
-                account,
-                paymaster: paymasterAddress,
-                paymasterInput: getGeneralPaymasterInput({
-                    innerInput: new Uint8Array()
-                })
-            })
-            // setLoading(false)
-        } catch (error) {
-            // setLoading(false)
-            console.log(error)
-        }
-
-
+    const handleClear = () => {
+        settokenAddress("")
+        setFee("")
+        setMin("")
+        setMax("")
     }
+    const isFormFilled = tokenAddress && fee && min && max
+    const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract("Zkexchange");
+
+    
 
     const addToken = async (e: any) => {
         e.preventDefault();
         setLoading(true)
         try {
-            await toast.promise(
-                handleToken(), {
-                pending: "Adding Token",
-                success: "Token added Successful",
-                error: "Unexpected Error"
-            }
-            )
+            await writeYourContractAsync({
+                functionName: "addToken",
+                args: [tokenAddress as `0x${string}`, fee, min, max]
+              });
+              handleClear()
             setLoading(false)
         } catch (error) {
             setLoading(false)
@@ -78,7 +49,7 @@ const AddTokenModal = () => {
 
     return (
         <div>
-            <button className="btn" onClick={openModal}>Open Modal</button>
+            <button className="btn" onClick={openModal}>Add Token</button>
             <dialog id="my_modal_1" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">Hello!</h3>

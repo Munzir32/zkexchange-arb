@@ -53,7 +53,7 @@ const Order = () => {
               setAmountInToken(amount);
             } catch (error) { }
           }}
-          placeholder='token'
+          placeholder='token amount'
           className="w-400 py-3 rounded-md text-white flex items-center px-3 bg-[#EAF0F7]"
           />
 
@@ -96,8 +96,7 @@ const Order = () => {
             <option value="0x493257fD37EDB34451f62EDf8D2a0C418852bA4C">USDT</option>
             <option value="0x1d17CBcF0D6D143135aE902365D2E5e2A16538D4">USDC</option>
             <option value="0x5A7d6b2F92C77FAD6CCaBd7EE0624E64907Eaf3E">Zksync</option>
-            <option value="0x5A7d6b2F92C77FAD6CCaBd7EE0624E64907Eaf3E">Zksync</option>
-            <option value="0x2E0319a0C40c6c918EC418DD3444352413cEba20">Zksync</option>
+            <option value="0x2E0319a0C40c6c918EC418DD3444352413cEba20">Native</option>
 
           </select>
         </div>

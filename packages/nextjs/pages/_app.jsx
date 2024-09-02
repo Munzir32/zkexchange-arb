@@ -1,6 +1,7 @@
 import "@rainbow-me/rainbowkit/styles.css";
 import "~~/styles/globals.css";
 import Layout from "~~/components/Layout"
+import Providers from "~~/providers/provider";
 // import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 // export const metadata = getMetadata({
@@ -23,15 +24,17 @@ import Layout from "~~/components/Layout"
 // export default ScaffoldEthApp;
 
 function App({ Component, pageProps }) {
-  
+
   return (
     <html suppressHydrationWarning>
-   <body>
-        <Layout>
-        <Component {...pageProps} />
-        </Layout>
-        </body>
-       </html>
+      <body>
+        <Providers>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </Providers>
+      </body>
+    </html>
   );
 }
 

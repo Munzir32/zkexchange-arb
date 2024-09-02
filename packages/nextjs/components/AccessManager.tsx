@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import CustomInput from './CustomInput';
 import { zkexchange } from '~~/contracts/zkexchange';
-import { getGeneralPaymasterInput } from "viem/zksync";
-import { toast } from "react-toastify";
-import { walletClient } from "~~/utils/wagmi"
 import { useReadContract } from 'wagmi';
+import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth';
+
 const AccessManager = () => {
     const openModal = () => {
         const modal = document.getElementById('my_modal_2') as HTMLDialogElement | null;
@@ -13,16 +12,19 @@ const AccessManager = () => {
         }
     };
 
+    const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract("Zkexchange");
+
+
    
 
-    const { data: manager_role } = useReadContract({
+    const { data: manager_rol } = useReadContract({
         address: zkexchange.address,
         abi: zkexchange.abi,
         functionName: "MANAGER_ROLE",
         args: []
     })
 
-    console.log(manager_role)
+    console.log(manager_rol)
     // 0x241ecf16d79d0f8dbfb92cbc07fe17840425976cf0667f022fe9877caa831b08
 
 
@@ -32,57 +34,19 @@ const handleClear = () => {
    
 
     const [accountM, setAccount] = useState('')
-    const [loading, setLoading] = useState(false)
     // const isFormFilled = tokenAddress && fee && min && max
 
-    const paymasterAddress = "0xBAb868Bfd8BB3e1B3Adaec62c69CE5DA6FEb3879"
-    const handleManageRole = async () => {
-        setLoading(true)
-        // if (!isFormFilled) throw new Error("fill the form")
-            
-            const [account] =
-            typeof window !== "undefined" && window.ethereum
-            ? await window.ethereum.request({ method: "eth_requestAccounts" }) // Request accounts if in a browser with Ethereum provider
-            : [];
-
-        if (!account) {
-            throw new Error("No account found. Please connect your wallet."); // Throw an error if no account is found
-        }
-
-        try {
-            
-            await walletClient?.writeContract({
-                address: zkexchange.address,
-                abi: zkexchange.abi,
-                functionName: "grantRole",
-                args: [manager_role as `0x${string}`, accountM],
-                account,
-                paymaster: paymasterAddress,
-                paymasterInput: getGeneralPaymasterInput({
-                    innerInput: new Uint8Array()
-                })
-            })
-            handleClear()
-            setLoading(false)
-        } catch (error) {
-            setLoading(false)
-            console.error(error)
-        }
-
-
-    }
+    const manager_role = "0x241ecf16d79d0f8dbfb92cbc07fe17840425976cf0667f022fe9877caa831b08"
 
     const addManager = async (e: any) => {
         e.preventDefault();
         // setLoading(true)
         try {
-            await toast.promise(
-                handleManageRole(), {
-                pending: "Granting manager role",
-                success: "Role granted succefully",
-                error: "Unexpected Error You must be an admin"
-            }
-            )
+            await writeYourContractAsync({
+                functionName: "grantRole",
+                args: [manager_role, accountM as `0x${string}`]
+              });
+              handleClear()
             // setLoading(false)
         } catch (error) {
             // setLoading(false)
@@ -110,7 +74,7 @@ const handleClear = () => {
                             />
                             <div>
 
-                            <button disabled={loading} className=' py-5 px-5 rounded-xl bg-[#2b3655]' onClick={addManager}>Add </button>
+                            <button  className=' py-5 px-5 rounded-xl bg-[#2b3655]' onClick={addManager}>Add </button>
                             <button className="btn mt-5 btn-xs sm:btn-sm md:btn-md lg:btn-lg" >Close</button>
                             </div>
 

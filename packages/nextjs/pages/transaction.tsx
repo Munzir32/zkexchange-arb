@@ -1,10 +1,13 @@
 import React from 'react'
-
+import Transactions from '~~/components/Transactions'
 
 
 const Transaction = () => {
   return (
-    <div>transaction</div>
+    <div>
+      <Transactions />
+    
+    </div>
   )
 }
 
