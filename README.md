@@ -78,3 +78,10 @@ To know more about its features, check out our [website](https://scaffoldeth.io)
 We welcome contributions to Scaffold-ETH 2!
 
 Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+
+Build completed: QmTDPXjZRiRFenz9eS7L4LKtipuXRoKpiACzjavHnNV7jg
+
+Deployed to https://thegraph.com/studio/subgraph/zkexchange
+
+Subgraph endpoints:
+Queries (HTTP):     https://api.studio.thegraph.com/query/88031/zkexchange/v0.0.1
