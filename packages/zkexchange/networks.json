@@ -1,0 +1,8 @@
+{
+  "arbitrum-sepolia": {
+    "Zkexchange": {
+      "address": "0xD0a690f3df9d9f697b78e774Cd9171418738C724",
+      "startBlock": 76576470
+    }
+  }
+}

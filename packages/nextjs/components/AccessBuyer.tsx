@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import CustomInput from './CustomInput';
 import { zkexchange } from '~~/contracts/zkexchange';
-import { getGeneralPaymasterInput } from "viem/zksync";
-import { toast } from "react-toastify";
-import { walletClient } from "~~/utils/wagmi"
 import { useReadContract } from 'wagmi';
+import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth';
 const AccessBuyer = () => {
     const openModal = () => {
         const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
@@ -13,7 +11,8 @@ const AccessBuyer = () => {
         }
     };
 
-   
+    const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract("Zkexchange");
+
 
     const { data: buyer_role } = useReadContract({
         address: zkexchange.address,
@@ -32,57 +31,19 @@ const handleClear = () => {
    
 
     const [accountM, setAccount] = useState('')
-    const [loading, setLoading] = useState(false)
     // const isFormFilled = tokenAddress && fee && min && max
 
-    const paymasterAddress = "0xBAb868Bfd8BB3e1B3Adaec62c69CE5DA6FEb3879"
-    const handleBuyerRole = async () => {
-        setLoading(true)
-        // if (!isFormFilled) throw new Error("fill the form")
-            
-            const [account] =
-            typeof window !== "undefined" && window.ethereum
-            ? await window.ethereum.request({ method: "eth_requestAccounts" }) // Request accounts if in a browser with Ethereum provider
-            : [];
-
-        if (!account) {
-            throw new Error("No account found. Please connect your wallet."); // Throw an error if no account is found
-        }
-
-        try {
-            
-            await walletClient?.writeContract({
-                address: zkexchange.address,
-                abi: zkexchange.abi,
-                functionName: "grantRole",
-                args: [buyer_role as `0x${string}`, accountM],
-                account,
-                paymaster: paymasterAddress,
-                paymasterInput: getGeneralPaymasterInput({
-                    innerInput: new Uint8Array()
-                })
-            })
-            handleClear()
-            setLoading(false)
-        } catch (error) {
-            setLoading(false)
-            console.error(error)
-        }
-
-
-    }
+    
 
     const addBuyer = async (e: any) => {
         e.preventDefault();
         // setLoading(true)
         try {
-            await toast.promise(
-                handleBuyerRole(), {
-                pending: "Granting buyer role",
-                success: "Role granted succefully",
-                error: "Unexpected Error or not an admin"
-            }
-            )
+            await writeYourContractAsync({
+                functionName: "grantRole",
+                args: [buyer_role as `0x${string}`, accountM]
+              });
+              handleClear()
             // setLoading(false)
         } catch (error) {
             // setLoading(false)
@@ -110,7 +71,7 @@ const handleClear = () => {
                             />
                             <div>
 
-                            <button disabled={loading} className=' py-5 px-5 rounded-xl bg-[#2b3655]' onClick={addBuyer}>Add </button>
+                            <button className=' py-5 px-5 rounded-xl bg-[#2b3655]' onClick={addBuyer}>Add </button>
                             <button className="btn mt-5 btn-xs sm:btn-sm md:btn-md lg:btn-lg" >Close</button>
                             </div>
 

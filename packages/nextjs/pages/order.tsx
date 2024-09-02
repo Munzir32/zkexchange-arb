@@ -1,18 +1,13 @@
 import React, { useState } from 'react'
 import type { ChangeEvent } from "react";
-import { walletClient } from "~~/utils/wagmi"
 import CustomInput from '~~/components/CustomInput'
-import { zkexchange } from '~~/contracts/zkexchange';
-import { getGeneralPaymasterInput } from "viem/zksync";
-import { toast } from "react-toastify";
+import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth';
 
 const Order = () => {
   const [amountInToken, setAmountInToken] = useState<any>('')
   const [amountInCon, setAmountInCon] = useState<any>('')
   const [currency, setCurrency] = useState<string>('')
   const [tokenAddress, settokenAddress] = useState<any>('')
-  const [loading, setLoading] = useState(false)
-  const paymasterAddress = "0xBAb868Bfd8BB3e1B3Adaec62c69CE5DA6FEb3879"
   // const isFormFilled = amountInCon && amountInToken && currency && tokenAddress
 
   const handleClear = () => {
@@ -22,56 +17,20 @@ const Order = () => {
     settokenAddress('')
   }
 
-
-
-  const handleExchange = async () => {
-    // if (!isFormFilled) throw new Error("fill the form")
-
-    const [account] =
-      typeof window !== "undefined" && window.ethereum
-        ? await window.ethereum.request({ method: "eth_requestAccounts" }) // Request accounts if in a browser with Ethereum provider
-        : [];
-
-    if (!account) {
-      throw new Error("No account found. Please connect your wallet."); // Throw an error if no account is found
-    }
-
-    setLoading(false)
-    try {
-      await walletClient?.writeContract({
-        address: zkexchange.address,
-        abi: zkexchange.abi,
-        functionName: "placeSellOrder",
-        args: [amountInToken, amountInCon, currency, tokenAddress],
-        value: amountInToken,
-        account,
-        paymaster: paymasterAddress,
-        paymasterInput: getGeneralPaymasterInput({
-          innerInput: new Uint8Array()
-        })
-      })
-      handleClear()
-      setLoading(false)
-    } catch (error) {
-      
-      console.log(error)
-      setLoading(false)
-    }
-
-    setLoading(false)
-  }
+  const { writeContractAsync: writeYourContractAsync } = useScaffoldWriteContract("Zkexchange");
 
   const placeorder = async (e: any) => {
     e.preventDefault();
     try {
-      await toast.promise(
-        handleExchange(), {
-        pending: "placing order",
-        success: "order success, waiting for fund release",
-        error: "Unexpected Error"
-      }
-      )
+      await writeYourContractAsync({
+        functionName: "placeSellOrder",
+        args: [amountInToken, amountInCon, currency, tokenAddress],
+        value: amountInToken,
+      });
+      handleClear()
+      
     } catch (error) {
+      
       console.log(error)
     }
   }
@@ -142,7 +101,7 @@ const Order = () => {
 
           </select>
         </div>
-        <button type='submit' onClick={placeorder} disabled={loading} className='btn mt-5 btn-xs sm:btn-sm md:btn-md lg:btn-lg'>Order</button>
+        <button type='submit' onClick={placeorder}  className='btn mt-5 btn-xs sm:btn-sm md:btn-md lg:btn-lg'>Order</button>
       </div>
 
     </div>

@@ -1,0 +1,44 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Zkexchange
+    network: arbitrum-sepolia
+    source:
+      address: "0xD0a690f3df9d9f697b78e774Cd9171418738C724"
+      abi: Zkexchange
+      startBlock: 76576470
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - FundsReleased
+        - OrderAccepted
+        - OrderCancelled
+        - RoleAdminChanged
+        - RoleGranted
+        - RoleRevoked
+        - SellOrderPlaced
+      abis:
+        - name: Zkexchange
+          file: ./abis/Zkexchange.json
+      eventHandlers:
+        - event: FundsReleased(indexed uint256,address,uint256)
+          handler: handleFundsReleased
+        - event: OrderAccepted(indexed uint256,address)
+          handler: handleOrderAccepted
+        - event: OrderCancelled(indexed uint256,address,uint256)
+          handler: handleOrderCancelled
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+        - event: SellOrderPlaced(indexed uint256,address,address,string,uint256,uint256)
+          handler: handleSellOrderPlaced
+      file: ./src/zkexchange.ts
