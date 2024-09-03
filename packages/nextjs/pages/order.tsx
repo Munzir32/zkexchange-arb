@@ -4,10 +4,10 @@ import CustomInput from '~~/components/CustomInput'
 import { useScaffoldWriteContract } from '~~/hooks/scaffold-eth';
 
 const Order = () => {
-  const [amountInToken, setAmountInToken] = useState<any>('')
-  const [amountInCon, setAmountInCon] = useState<any>('')
-  const [currency, setCurrency] = useState<string>('')
-  const [tokenAddress, settokenAddress] = useState<any>('')
+  const [amountInToken, setAmountInToken] = useState<number | string>('');
+  const [amountInCon, setAmountInCon] = useState<string>('');
+  const [currency, setCurrency] = useState<string>('ngn');
+  const [tokenAddress, settokenAddress] = useState<any>('0x493257fD37EDB34451f62EDf8D2a0C418852bA4C')
   // const isFormFilled = amountInCon && amountInToken && currency && tokenAddress
 
   const handleClear = () => {
@@ -21,11 +21,13 @@ const Order = () => {
 
   const placeorder = async (e: any) => {
     e.preventDefault();
+    const amountBigInt = BigInt(amountInToken);
+    const amountInConBigInt = BigInt(amountInCon);
     try {
       await writeYourContractAsync({
         functionName: "placeSellOrder",
-        args: [amountInToken, amountInCon, currency, tokenAddress],
-        value: amountInToken,
+        args: [amountBigInt, amountInConBigInt, currency, tokenAddress],
+        value: amountBigInt,
       });
       handleClear()
       

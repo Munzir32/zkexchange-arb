@@ -3,6 +3,7 @@ import AddTokenModal from '~~/components/AddTokenModal'
 import AccessManager from '~~/components/AccessManager'
 import AccessBuyer from '~~/components/AccessBuyer'
 import { useAccount } from 'wagmi'
+import AddCurrency from '~~/components/AddCurrency'
 
 const Admin = () => {
 
@@ -16,6 +17,7 @@ const Admin = () => {
       <AddTokenModal />
       <AccessManager />
       <AccessBuyer />
+      <AddCurrency />
       </>
     : (
       <p>Connect Admin wallet to contiue</p>
