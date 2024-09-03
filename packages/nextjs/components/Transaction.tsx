@@ -1,9 +1,19 @@
 // import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 // import { gql, request } from "graphql-request"
+import { truuncateAddress } from '~~/helpers/truncateAddress'
 
+interface SellOrderPlaced {
+    currency: string;
+    
+    orderId: string;
+    seller: string;
+    token: string;
+    amountInCurrency: string;
+    amountInToken: string;
+  }
 
-const Transaction = () => {
+const Transaction = ({ seller, currency, orderId, amountInCurrency, amountInToken }: SellOrderPlaced) => {
 
 //     const query = gql`
 //     {
@@ -33,26 +43,13 @@ const Transaction = () => {
             <tbody>
                 {/* row 1 */}
                 <tr>
-                    <th>1</th>
-                    <td>Cy Ganderton</td>
-                    <td>Quality Control Specialist</td>
-                    <td>Blue</td>
-                    <td>Blue</td>
+                    <th>{orderId}</th>
+                    <td>{truuncateAddress(seller)}</td>
+                    <td>{amountInCurrency}</td>
+                    <td>{currency}</td>
+                    <td>{amountInToken}</td>
                 </tr>
-                {/* row 2 */}
-                <tr>
-                    <th>2</th>
-                    <td>Hart Hagerty</td>
-                    <td>Desktop Support Technician</td>
-                    <td>Purple</td>
-                </tr>
-                {/* row 3 */}
-                <tr>
-                    <th>3</th>
-                    <td>Brice Swyre</td>
-                    <td>Tax Accountant</td>
-                    <td>Red</td>
-                </tr>
+                
             </tbody>
         </>
     )
