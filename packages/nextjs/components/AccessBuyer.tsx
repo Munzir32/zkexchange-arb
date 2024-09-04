@@ -22,7 +22,7 @@ const AccessBuyer = () => {
     })
 
     console.log(buyer_role)
-    // 0x241ecf16d79d0f8dbfb92cbc07fe17840425976cf0667f022fe9877caa831b08
+    // 0xf8cd32ed93fc2f9fc78152a14807c9609af3d99c5fe4dc6b106a801aaddfe90e
 
 
 const handleClear = () => {
@@ -41,7 +41,7 @@ const handleClear = () => {
         try {
             await writeContractAsync({
                 functionName: "grantRole",
-                args: ["0x241ecf16d79d0f8dbfb92cbc07fe17840425976cf0667f022fe9877caa831b08", accountM as `0x${string}`]
+                args: ["0xf8cd32ed93fc2f9fc78152a14807c9609af3d99c5fe4dc6b106a801aaddfe90e", accountM as `0x${string}`]
               });
               handleClear()
             // setLoading(false)

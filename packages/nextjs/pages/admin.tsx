@@ -14,10 +14,13 @@ const Admin = () => {
     <div>
       {address == "0xbE70b0cE9ecB7c0c4f0be93d8c329212a90BE112" ? 
       <>
+      <div className=' flex flex-row'>
+
       <AddTokenModal />
       <AccessManager />
       <AccessBuyer />
       <AddCurrency />
+      </div>
       </>
     : (
       <p>Connect Admin wallet to contiue</p>

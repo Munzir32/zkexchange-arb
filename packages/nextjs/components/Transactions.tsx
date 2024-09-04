@@ -57,6 +57,8 @@ const Transactions = () => {
               <th>Amount Currency</th>
               <th>Currency</th>
               <th>Token Amount</th>
+              <th>Buyer</th>
+
             </tr>
           </thead>
           {status === 'pending' ? (  
